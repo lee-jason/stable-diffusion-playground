@@ -1,0 +1,3 @@
+[submodule "controlnet/external/ControlNetPlus"]
+	path = controlnet/external/ControlNetPlus
+	url = https://github.com/xinsir6/ControlNetPlus.git

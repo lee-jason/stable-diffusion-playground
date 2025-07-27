@@ -1,3 +1,10 @@
+import numpy as np
+import cv2
+import math
+from typing import List
+from controlnet_aux.open_pos import util, Keypoint
+
+
 def draw_bodypose(canvas: np.ndarray, keypoints: List[Keypoint]) -> np.ndarray:
     """
     Draw keypoints and limbs representing body pose on a given canvas.
@@ -105,3 +112,11 @@ def draw_bodypose(canvas: np.ndarray, keypoints: List[Keypoint]) -> np.ndarray:
         cv2.circle(canvas, (int(x), int(y)), int(4 * ratio), color, thickness=-1)
 
     return canvas
+
+
+def monkey_patch():
+    # https://huggingface.co/xinsir/controlnet-openpose-sdxl-1.0#replace-the-default-draw-pose-function-to-get-better-result
+    util.draw_bodypose = draw_bodypose
+
+
+monkey_patch()

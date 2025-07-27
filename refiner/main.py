@@ -6,7 +6,10 @@ from torchvision.transforms.functional import to_pil_image
 
 # load both base & refiner
 base = DiffusionPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True
+    "stabilityai/stable-diffusion-xl-base-1.0",
+    torch_dtype=torch.float16,
+    variant="fp16",
+    use_safetensors=True,
 )
 base.to("mps")
 refiner = DiffusionPipeline.from_pretrained(
@@ -23,7 +26,9 @@ refiner.to("mps")
 n_steps = 40
 high_noise_frac = 0.8
 
-prompt = "Sleepy girl on couch with laptop opened on a running video"
+prompt = (
+    "Cartoon style sleepy girl lying on couch with laptop opened on a running video."
+)
 
 # run both experts
 image = base(
@@ -34,11 +39,11 @@ image = base(
 ).images
 # If image[0] is a tensor:
 pil_image = to_pil_image(image[0].cpu())
-pil_image.save("base.png")
+pil_image.save("output_base.png")
 image = refiner(
     prompt=prompt,
     num_inference_steps=n_steps,
     denoising_start=high_noise_frac,
     image=image,
 ).images[0]
-image.save("refined.png")
+image.save("output.png")
