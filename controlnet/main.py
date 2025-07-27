@@ -46,6 +46,8 @@ images = pipe(
     negative_prompt=negative_prompt,
     image=image,
     controlnet_conditioning_scale=controlnet_conditioning_scale,
+    num_images_per_prompt=3,
 ).images
 
-images[0].save(f"controlnet.png")
+for i, image in enumerate(images):
+    image.save(f"output{i}.png")
