@@ -1,3 +1,3 @@
-[submodule "controlnet/external/ControlNetPlus"]
-	path = controlnet/external/ControlNetPlus
+[submodule "controlnet_plus/external/ControlNetPlus"]
+	path = controlnet_plus/external/ControlNetPlus
 	url = https://github.com/xinsir6/ControlNetPlus.git
