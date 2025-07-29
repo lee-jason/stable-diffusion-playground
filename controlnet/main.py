@@ -43,6 +43,7 @@ class Preprocessors:
 
 
 image = load_image("input.jpeg")
+image = image.resize((512, 512), Image.Resampling.LANCZOS)
 
 image_canny = Preprocessors.canny(image)
 image_depth_map = Preprocessors.depth_map(image)
@@ -56,7 +57,8 @@ controlnet_depth_map = ControlNetModel.from_pretrained(
 )
 
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5",
+    "SG161222/Realistic_Vision_V4.0_noVAE",
+    # "runwayml/stable-diffusion-v1-5",
     controlnet=[controlnet_canny, controlnet_depth_map],
     safety_checker=None,
     torch_dtype=torch.float16,
@@ -73,7 +75,8 @@ pipe.to("mps")
 # pipe.enable_model_cpu_offload()
 
 image = pipe(
-    "A hamburger with eyes",
+    "Backdrop mountain landscape. Forested trees. Photorealistic. Foreground lake. Starry moonlit night. Night time scene. High quality",
+    negative_promp="low quality",
     image=[image_canny, image_depth_map],
     controlnet_conditioning_scale=[0.8, 0.5],  # Control strength for each
     control_guidance_end=[0.8, 0.8],  # When to stop each control

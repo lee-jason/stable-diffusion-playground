@@ -95,7 +95,7 @@ image_canny = Preprocessors.canny(source_image)
 source_image_depth_map = Preprocessors.depth_map(source_image)
 image_openpose = Preprocessors.openpose(source_image)
 
-source_face_embed = face_embed(source_face_image)
+# source_face_embed = face_embed(source_face_image)
 
 
 controlnet_depth_map = ControlNetModel.from_pretrained(
@@ -127,23 +127,23 @@ ip_model = IPAdapter(
     pipe, "InvokeAI/ip_adapter_sd_image_encoder", "../models/ip-adapter_sd15.bin", "mps"
 )
 
-# load ip-adapter
-# load ip-adapter
-ip_model = IPAdapterFaceID(
-    "InvokeAI/ip_adapter_sd_image_encoder",
-    "../models/ip-adapter-faceid_sd15.bin",
-    "mps",
-)
+# # load ip-adapter
+# # load ip-adapter
+# ip_model = IPAdapterFaceID(
+#     "InvokeAI/ip_adapter_sd_image_encoder",
+#     "../models/ip-adapter-faceid_sd15.bin",
+#     "mps",
+# )
 
 
 image = ip_model.generate(
-    prompt="photo-realistic",
+    prompt="photo realistic. high definition",
     negative_prompt="monochrome, lowres, bad anatomy, worst quality, low quality, blurry",
-    faceid_embeds=source_face_embed,
+    # faceid_embeds=source_face_embed,
     pil_image=inspo_image,
     image=source_image_depth_map,
     num_samples=1,
-    num_inference_steps=30,
+    num_inference_steps=100,
     seed=randint(0, 100000000),
 )[0]
 
