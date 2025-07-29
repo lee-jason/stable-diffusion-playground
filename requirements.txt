@@ -43,3 +43,4 @@ zipp==3.23.0
 python-dotenv==1.0.0
 protobuf==6.*
 sentencepiece==0.2.0
+xformers==0.0.31
