@@ -1,3 +1,6 @@
+# https://huggingface.co/h94/IP-Adapter-FaceID
+# https://huggingface.co/h94/IP-Adapter
+
 from random import randint
 from types import MethodType
 
@@ -10,10 +13,13 @@ from diffusers import (
     ControlNetModel,
     DDIMScheduler,
     StableDiffusionControlNetPipeline,
+    StableDiffusionPipeline,
     UniPCMultistepScheduler,
 )
 from diffusers.utils import load_image
+from insightface.app import FaceAnalysis
 from ip_adapter import IPAdapter
+from ip_adapter.ip_adapter_faceid import IPAdapterFaceID
 from PIL import Image
 from transformers import pipeline
 
@@ -83,10 +89,13 @@ class Preprocessors:
 
 inspo_image = load_image("inspo.avif")
 source_image = load_image("source.avif")
+source_face_image = cv2.imread("source_face_image.jpg")
 
 image_canny = Preprocessors.canny(source_image)
 source_image_depth_map = Preprocessors.depth_map(source_image)
 image_openpose = Preprocessors.openpose(source_image)
+
+source_face_embed = face_embed(source_face_image)
 
 
 controlnet_depth_map = ControlNetModel.from_pretrained(
@@ -100,7 +109,7 @@ controlnet = ControlNetModel.from_pretrained(
 )
 # load SD pipeline
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5",
+    "SG161222/Realistic_Vision_V6.0_B1_noVAE",
     controlnet=controlnet,
     torch_dtype=torch.float16,
     scheduler=noise_scheduler(),
@@ -117,8 +126,20 @@ pipe.to("mps")
 ip_model = IPAdapter(
     pipe, "InvokeAI/ip_adapter_sd_image_encoder", "../models/ip-adapter_sd15.bin", "mps"
 )
+
+# load ip-adapter
+# load ip-adapter
+ip_model = IPAdapterFaceID(
+    "InvokeAI/ip_adapter_sd_image_encoder",
+    "../models/ip-adapter-faceid_sd15.bin",
+    "mps",
+)
+
+
 image = ip_model.generate(
     prompt="photo-realistic",
+    negative_prompt="monochrome, lowres, bad anatomy, worst quality, low quality, blurry",
+    faceid_embeds=source_face_embed,
     pil_image=inspo_image,
     image=source_image_depth_map,
     num_samples=1,
@@ -128,3 +149,6 @@ image = ip_model.generate(
 
 
 image.save("output.png")
+
+
+### Face IP
