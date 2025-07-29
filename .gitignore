@@ -1,1 +1,3 @@
-/artifacts/*
+*.png
+*.jpg
+.env
