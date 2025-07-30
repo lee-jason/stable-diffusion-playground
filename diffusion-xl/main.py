@@ -30,7 +30,7 @@ pipe.scheduler = EulerDiscreteScheduler.from_config(
 
 # Ensure using the same inference steps as the loaded model and CFG set to 0.
 image = pipe(
-    "A lobster making soup",
+    "A fish that looks like a hamburger, swimming in the ocean with its fish friends",
     negative_prompt="low quality",
     num_inference_steps=8,
     guidance_scale=0,
