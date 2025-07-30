@@ -70,13 +70,14 @@ def generate_image(
         prompt=prompt,
         num_inference_steps=n_steps,
         denoising_end=high_noise_frac,
-        output_type="latent",
-    ).images
+        output_type="pil",
+    ).images[0]
 
-    # Save base output
-    pil_image = to_pil_image(image[0].cpu())
-    pil_image.save(output_base)
-    print(f"Base model output saved to: {output_base}")
+    # # Save base output
+    image.save(output_base)
+    # pil_image = to_pil_image(image[0].cpu())
+    # pil_image.save(output_base)
+    # print(f"Base model output saved to: {output_base}")
 
     # Run refiner
     print("Running refiner...")
@@ -123,7 +124,7 @@ def main():
         "-f",
         type=float,
         default=0.8,
-        help="Fraction of steps to run on base model (0.0-1.0, default: 0.8)",
+        help="Fraction of steps to run on base model (0.0-1.0, default: 0.8). Smaller values means more variability in refinement output",
     )
 
     parser.add_argument(
