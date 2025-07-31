@@ -99,7 +99,7 @@ def generate_fitting_room_image(
     inspo_image_path,
     source_image_path,
     face_image_path,
-    prompt="fashion model. photo realistic. high definition.",
+    prompt="fashion model. photo realistic. high definition. Clean clear face. high quality accurate face.",
     negative_prompt="monochrome, lowres, bad anatomy, worst quality, low quality, blurry",
     num_inference_steps=100,
     output_file="output.png",
@@ -124,6 +124,8 @@ def generate_fitting_room_image(
         num_inference_steps=num_inference_steps,
         output_file=output_file,
     )
+    image.save("clothes_swap_image.png")
+    image = Image.open("clothes_swap_image.png")
     image = face_swap(image, face_image_path)
     image.save(output_file)
 
@@ -213,7 +215,7 @@ def face_swap(source_image, face_image_path):
     ip_ckpt = "../models/ip-adapter_sd15.bin"
     device = "mps"
 
-    def create_simple_face_mask(image_path, padding=20):
+    def create_simple_face_mask(image_path, padding=15):
         """
         Create a simple rectangular face mask using face_recognition library
 
@@ -275,7 +277,6 @@ def face_swap(source_image, face_image_path):
         safety_checker=None,
     )
 
-    source_image.save("temp_source_image.png")
     source_image = source_image
     source_masked_image = create_simple_face_mask("temp_source_image.png")
     face_image = Image.open(face_image_path)
@@ -289,6 +290,7 @@ def face_swap(source_image, face_image_path):
     )
 
     image = ip_model.generate(
+        prompt="high quality face, clear face, clean face",
         negative_prompt=negative_prompt,
         pil_image=face_image,
         num_samples=1,
