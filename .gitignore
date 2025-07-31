@@ -1,6 +1,7 @@
 *.png
 *.jpg
 *.jpeg
+*.avif
 .env
 .venv
 .DS_Store
