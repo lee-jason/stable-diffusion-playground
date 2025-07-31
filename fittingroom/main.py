@@ -139,7 +139,6 @@ ip_model = IPAdapter(
 image = ip_model.generate(
     prompt="photo realistic. high definition",
     negative_prompt="monochrome, lowres, bad anatomy, worst quality, low quality, blurry",
-    # faceid_embeds=source_face_embed,
     pil_image=inspo_image,
     image=source_image_depth_map,
     num_samples=1,
@@ -149,6 +148,3 @@ image = ip_model.generate(
 
 
 image.save("output.png")
-
-
-### Face IP
